@@ -9,7 +9,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  //@Post()
+  // @Post()
   @MessagePattern({ cmd: 'create_product' })
   create(@Payload() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
@@ -24,13 +24,14 @@ export class ProductsController {
   // @Get(':id')
   @MessagePattern({ cmd: 'find_one_product' })
   findOne(@Payload('id', ParseIntPipe) id: number) {
-    return this.productsService.findOne(+id);
+    // { id: 1
+    return this.productsService.findOne(id);
   }
 
   // @Patch(':id')
   @MessagePattern({ cmd: 'update_product' })
   update(
-    // @Param('id', ParseIntPipe) id: string,
+    // @Param('id', ParseIntPipe) id: number,
     // @Body() updateProductDto: UpdateProductDto,
     @Payload() updateProductDto: UpdateProductDto,
   ) {
@@ -40,6 +41,11 @@ export class ProductsController {
   // @Delete(':id')
   @MessagePattern({ cmd: 'delete_product' })
   remove(@Payload('id', ParseIntPipe) id: number) {
-    return this.productsService.remove(+id);
+    return this.productsService.remove(id);
+  }
+
+  @MessagePattern({ cmd: 'validate_products' })
+  validateProduct(@Payload() ids: number[]) {
+    return this.productsService.validateProducts(ids);
   }
 }
